@@ -242,10 +242,17 @@ public class AdventureGame
 		{
 			Console.WriteLine("You quit the game!");
 		}
-		else
-		{
-			Console.WriteLine("Game Over!");
-		}
+
+		Console.WriteLine();
+		Console.WriteLine("Press ENTER to play again...");
+		Console.ReadLine();
+
+		RestartGame();
+	}
+
+	private void RestartGame()
+	{
+		Start();
 	}
 
 	private void GoNorth(Room r)

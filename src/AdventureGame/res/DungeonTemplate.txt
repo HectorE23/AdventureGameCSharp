@@ -1,20 +1,29 @@
-4
-4
+5
+7
 1
 1
 1
 2
-2
+3
 1
-2
-2
+3
+5
 1
-1
-####
-#  #
-#  #
-####
+5
+#######
+#     #
+# ### #
+#     #
+#######
 1|Start room
-0|Dark room
+1|Lamp room
+1|Hallway
+0|Dark hallway
+1|Grue hallway
 1|Key room
+1|Treasure hallway
+1|Exit hallway
+1|Hallway
+1|Hallway
 1|Treasure room
+1|Exit room
