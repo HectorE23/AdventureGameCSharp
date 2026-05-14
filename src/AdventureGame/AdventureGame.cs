@@ -518,26 +518,30 @@ public class AdventureGame
 			return path;
 		}
 
-		bool[,] visited = new bool[rows, cols];
+		// Distancia de cada nodo
+		int[,] distance = new int[rows, cols];
 		int[,] prevRow = new int[rows, cols];
 		int[,] prevCol = new int[rows, cols];
 
-		for (int row = 0; row < rows; row++)
+		// Inicializar distancias en infinito
+		for (int r = 0; r < rows; r++)
 		{
-			for (int col = 0; col < cols; col++)
+			for (int c = 0; c < cols; c++)
 			{
-				prevRow[row, col] = -1;
-				prevCol[row, col] = -1;
+				distance[r, c] = int.MaxValue;
+				prevRow[r, c] = -1;
+				prevCol[r, c] = -1;
 			}
 		}
 
-		Queue<(int row, int col)> queue = new();
-		queue.Enqueue((startRow, startCol));
-		visited[startRow, startCol] = true;
+		var priorityQueue = new PriorityQueue<(int row, int col), int>();
 
-		while (queue.Count > 0)
+		distance[startRow, startCol] = 0;
+		priorityQueue.Enqueue((startRow, startCol), 0);
+
+		while (priorityQueue.Count > 0)
 		{
-			var current = queue.Dequeue();
+			var current = priorityQueue.Dequeue();
 
 			if (current.row == targetRow && current.col == targetCol)
 			{
@@ -546,31 +550,34 @@ public class AdventureGame
 
 			foreach (var neighbor in GetNeighbors(current.row, current.col))
 			{
-				if (!visited[neighbor.row, neighbor.col])
+				int newDistance = distance[current.row, current.col] + 1;
+
+				if (newDistance < distance[neighbor.row, neighbor.col])
 				{
-					visited[neighbor.row, neighbor.col] = true;
+					distance[neighbor.row, neighbor.col] = newDistance;
 					prevRow[neighbor.row, neighbor.col] = current.row;
 					prevCol[neighbor.row, neighbor.col] = current.col;
-					queue.Enqueue(neighbor);
+					priorityQueue.Enqueue(neighbor, newDistance);
 				}
 			}
 		}
 
-		if (!visited[targetRow, targetCol])
+		if (distance[targetRow, targetCol] == int.MaxValue)
 		{
 			return path;
 		}
 
-		int r = targetRow;
-		int c = targetCol;
+		// Reconstruir el path
+		int row2 = targetRow;
+		int col2 = targetCol;
 
-		while (!(r == startRow && c == startCol))
+		while (!(row2 == startRow && col2 == startCol))
 		{
-			path.Add((r, c));
-			int pr = prevRow[r, c];
-			int pc = prevCol[r, c];
-			r = pr;
-			c = pc;
+			path.Add((row2, col2));
+			int pr = prevRow[row2, col2];
+			int pc = prevCol[row2, col2];
+			row2 = pr;
+			col2 = pc;
 		}
 
 		path.Add((startRow, startCol));
